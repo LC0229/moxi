@@ -1,68 +1,69 @@
-# Moxi 🚀
+# Moxi
 
 **AI-Powered Documentation Generator with Continuous Learning**
 
-Moxi is an intelligent documentation generator that analyzes GitHub repositories and creates high-quality, comprehensive documentation using fine-tuned Large Language Models. Inspired by [llm-twin-course](https://github.com/decodingml/llm-twin-course), Moxi implements a complete ML pipeline from data collection to model deployment.
+Moxi is an intelligent documentation generator that analyzes GitHub repositories and creates high-quality, comprehensive documentation using fine-tuned Large Language Models. Moxi implements a complete ML pipeline from data collection to model deployment, with automatic documentation updates on every code push.
 
 ---
 
-## 🎯 What Does Moxi Do?
+## What Does Moxi Do?
 
 Moxi automates the tedious process of writing documentation by:
 1. **Analyzing** your codebase structure and key files
 2. **Understanding** your project's architecture and purpose
 3. **Generating** professional README files, architecture docs, and API documentation
-4. **Learning** from thousands of high-quality open-source projects
+4. **Auto-updating** documentation when code changes
 
 ---
 
-## ✨ Key Features
+## Key Features
 
-- 🤖 **Custom Fine-Tuned Model** - Train your own Llama-3.1-8B specialized for documentation
-- 📊 **Automated Dataset Generation** - Create training data from 10,000+ GitHub repositories
-- 🔍 **Intelligent Repository Analysis** - Parse and understand project structures
-- 📝 **Multi-Format Documentation** - Generate README, ARCHITECTURE, API docs
-- 🎯 **A/B Testing** - Compare your model against GPT-4
-- 🐳 **Docker Ready** - Easy deployment with Docker Compose
-- 🛠️ **CLI Tool** - Simple command-line interface
+- **Custom Fine-Tuned Model** - Train your own Llama-3.1-8B specialized for documentation
+- **Automated Dataset Generation** - Create training data from 10,000+ GitHub repositories
+- **Intelligent Repository Analysis** - Parse and understand project structures
+- **Multi-Format Documentation** - Generate README, ARCHITECTURE, API docs
+- **A/B Testing** - Compare your model against GPT-4
+- **Docker Ready** - Easy deployment with Docker Compose
+- **CLI Tool** - Simple command-line interface
+- **Auto-Update on Push** - Automatically detect code changes and update documentation
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                     MOXI PIPELINE                            │
 └─────────────────────────────────────────────────────────────┘
 
-1️⃣  REPO ANALYZER
+1. REPO ANALYZER
     ├── GitHub Crawler
     ├── Structure Parser
     └── File Analyzer
     
-2️⃣  DATASET GENERATOR
+2. DATASET GENERATOR
     ├── GitHub Trending Crawler
     ├── Instruction Generator (GPT-4)
     └── Quality Control
     
-3️⃣  TRAINING PIPELINE
+3. TRAINING PIPELINE
     ├── SFT Trainer (LoRA/QLoRA)
     ├── Experiment Tracking (W&B)
     └── Model Evaluation
     
-4️⃣  DOC GENERATOR
+4. DOC GENERATOR
     ├── Custom Model Inference
     ├── Format & Validate
     └── Export Markdown
     
-5️⃣  CLI & EVALUATION
+5. CLI & EVALUATION
     ├── Command-Line Interface
     └── A/B Testing Framework
 ```
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -75,7 +76,7 @@ Moxi automates the tedious process of writing documentation by:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/moxi.git
+git clone https://github.com/LC0229/moxi.git
 cd moxi
 
 # Create virtual environment
@@ -105,7 +106,7 @@ make local-generate-docs REPO=https://github.com/pytorch/pytorch
 
 ---
 
-## 📚 Full Pipeline
+## Full Pipeline
 
 ### Step 1: Generate Training Dataset
 
@@ -149,7 +150,7 @@ make compare-models
 
 ---
 
-## 🛠️ Development
+## Development
 
 ### Project Structure
 
@@ -194,7 +195,7 @@ make format
 
 ---
 
-## 📊 Dataset & Training
+## Dataset & Training
 
 ### Dataset Statistics
 
@@ -221,7 +222,7 @@ make format
 
 ---
 
-## 🐳 Docker Deployment
+## Docker Deployment
 
 ```bash
 # Build containers
@@ -239,7 +240,7 @@ make docker-down
 
 ---
 
-## 📖 CLI Usage
+## CLI Usage
 
 ```bash
 # Generate documentation
@@ -254,7 +255,7 @@ python -m cli.main evaluate --compare custom vs gpt4
 
 ---
 
-## 🎯 Roadmap
+## Roadmap
 
 - [x] Phase 0: Project Setup
 - [x] Phase 1: Core Infrastructure
@@ -268,7 +269,7 @@ python -m cli.main evaluate --compare custom vs gpt4
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please:
 
@@ -280,27 +281,22 @@ Contributions are welcome! Please:
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
-- Inspired by [llm-twin-course](https://github.com/decodingml/llm-twin-course) by Paul Iusztin
 - Built with [Llama-3.1-8B](https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct)
 - Powered by Hugging Face Transformers, PEFT, and TRL
 
 ---
 
-## 📧 Contact
+## Contact
 
 - **Author:** Shengrui Chen
 - **Email:** chenleon572@gmail.com
-- **GitHub:** [@yourusername](https://github.com/yourusername)
-
----
-
-⭐ **Star this repo if you find it useful!** ⭐
+- **GitHub:** [@LC0229](https://github.com/LC0229)
 
