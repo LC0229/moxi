@@ -1,0 +1,95 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+moxi/
+.venv/
+venv/
+ENV/
+env/
+.virtualenv/
+
+# Environment files
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# Data & Models (large files)
+data/repos/
+data/downloads/
+training_data/raw/*.json
+training_data/processed/*.json
+models/base/*
+models/checkpoints/*
+models/final/*
+*.bin
+*.safetensors
+*.h5
+*.pt
+*.pth
+*.ckpt
+
+# Keep directory structure
+!data/.gitkeep
+!training_data/raw/.gitkeep
+!training_data/processed/.gitkeep
+!training_data/splits/.gitkeep
+!models/base/.gitkeep
+!models/checkpoints/.gitkeep
+!models/final/.gitkeep
+
+# Logs
+logs/
+*.log
+wandb/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Docker
+.docker/.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
