@@ -52,6 +52,7 @@ class AppSettings(BaseSettings):
     DATA_DIR: str = f"{ROOT_DIR}/data"
     TRAINING_DATA_DIR: str = f"{ROOT_DIR}/training_data"
     MODELS_DIR: str = f"{ROOT_DIR}/models"
+    REPO_CACHE_DIR: str | None = f"{ROOT_DIR}/data/repos"  # Cache for cloned repositories
     
     # Dataset generation config
     MIN_REPO_STARS: int = 100
