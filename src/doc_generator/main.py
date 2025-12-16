@@ -10,6 +10,7 @@ from doc_generator.core import generate_single_doc, generate_batch_docs
 logger = get_logger(__name__)
 
 
+
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Generate documentation for repositories")
     parser.add_argument(
