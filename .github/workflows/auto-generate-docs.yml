@@ -58,22 +58,7 @@ jobs:
             https://github.com/${{ github.repository }} \
             --auto-write \
             --file-name GitHub/README_BY_MOXI.md
-      
-      - name: Check for changes
-        id: check-changes
-        run: |
-          if [ -n "$(git status --porcelain)" ]; then
-            echo "has_changes=true" >> $GITHUB_OUTPUT
-          else
-            echo "has_changes=false" >> $GITHUB_OUTPUT
-          fi
-      
-      - name: Commit and push changes
-        if: steps.check-changes.outputs.has_changes == 'true'
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add GitHub/README_BY_MOXI.md
-          git commit -m "docs: Auto-update GitHub/README_BY_MOXI.md using Moxi [skip ci]" || exit 0
-          git push
+          
+          # Note: write_to_repo_via_api() writes directly via GitHub API,
+          # so no local git commit is needed. The file is already in the repository.
 
