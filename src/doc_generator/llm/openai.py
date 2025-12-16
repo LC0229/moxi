@@ -1,5 +1,6 @@
 """OpenAI-based document generator using GPT-4o-mini."""
 
+from datetime import datetime
 from typing import Optional
 
 from openai import OpenAI
@@ -35,6 +36,7 @@ Code Samples:
 
 Please generate a README.md that includes:
 1. Project title and description (use the actual project name: {project_name})
+   IMPORTANT: Add the current timestamp after the title in the format: "Last updated: {current_time}"
 2. **How This Project Works** - Explain the architecture, pipeline, and workflow
 3. **How to Use** - Step-by-step usage instructions with examples
 4. Features (based on the ACTUAL code structure and files shown above)
@@ -59,6 +61,7 @@ CRITICAL REQUIREMENTS:
   * Command-line examples
   * Configuration options
   * Common use cases
+- The title MUST be followed by "Last updated: {current_time}" on the same line or immediately after
 
 Make the README professional, clear, and helpful for users who want to understand and use this project.
 
@@ -120,6 +123,9 @@ class OpenAIDocGenerator:
             
             code_samples_str = "\n".join(code_samples) if code_samples else "No code samples available"
             
+            # Get current time for timestamp
+            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
+            
             # Build prompt
             prompt = README_PROMPT_TEMPLATE.format(
                 project_name=project_name,
@@ -128,6 +134,7 @@ class OpenAIDocGenerator:
                 file_tree=file_tree,
                 key_files=key_files_str or "No key files detected",
                 code_samples=code_samples_str,
+                current_time=current_time,
             )
             
             logger.debug("Prompt prepared", 
