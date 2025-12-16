@@ -57,7 +57,7 @@ jobs:
           python -m doc_generator.main \
             https://github.com/${{ github.repository }} \
             --auto-write \
-            --file-name GitHub/README_BY_MOXI.md
+            --file-name README_BY_MOXI.md
           
           # Note: write_to_repo_via_api() writes directly via GitHub API,
           # so no local git commit is needed. The file is already in the repository.
