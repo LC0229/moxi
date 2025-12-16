@@ -35,12 +35,14 @@ Code Samples:
 
 Please generate a README.md that includes:
 1. Project title and description (use the actual project name: {project_name})
-2. Features (based on the ACTUAL code structure and files shown above)
-3. Installation instructions (based on the project structure)
-4. Usage examples (based on the code samples provided)
-5. Project structure section (use the EXACT structure shown above, formatted as a code block)
-6. Contributing guidelines
-7. License information (if available)
+2. **How This Project Works** - Explain the architecture, pipeline, and workflow
+3. **How to Use** - Step-by-step usage instructions with examples
+4. Features (based on the ACTUAL code structure and files shown above)
+5. Installation instructions (based on the project structure)
+6. Usage examples (based on the code samples provided)
+7. Project structure section (use the EXACT structure shown above, formatted as a code block)
+8. Contributing guidelines
+9. License information (if available)
 
 CRITICAL REQUIREMENTS:
 - Use the actual project name "{project_name}" in the README, not generic placeholders like "MyLibrary"
@@ -48,6 +50,15 @@ CRITICAL REQUIREMENTS:
 - Base ALL content on the ACTUAL code and structure provided, not generic templates
 - Make it specific to this project - analyze the actual files and code samples
 - For the project structure, use the exact tree format shown above
+- **IMPORTANT**: Include a detailed "How This Project Works" section explaining:
+  * The overall architecture and pipeline
+  * How different components interact
+  * The data flow from input to output
+- **IMPORTANT**: Include a detailed "How to Use" section with:
+  * Step-by-step instructions
+  * Command-line examples
+  * Configuration options
+  * Common use cases
 
 Make the README professional, clear, and helpful for users who want to understand and use this project.
 
