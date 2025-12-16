@@ -10,6 +10,7 @@ on:
       - 'src/**'
       - 'pyproject.toml'
       - '.github/workflows/auto-generate-docs.yml'
+      - 'Makefile'
   workflow_dispatch:  # Allow manual trigger
 
 jobs:
@@ -34,9 +35,11 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -e .
-          # Install additional dependencies if needed
-          pip install tomli  # For reading pyproject.toml
+          # Install dependencies directly (avoid poetry build issues)
+          pip install pydantic pydantic-settings structlog rich click requests openai tomli
+          # Note: Training dependencies (torch, transformers, etc.) are optional for doc generation
+          # Install them only if needed for model inference
+          # pip install transformers torch peft trl datasets accelerate bitsandbytes
       
       - name: Configure environment
         run: |
@@ -54,7 +57,7 @@ jobs:
           python -m doc_generator.main \
             https://github.com/${{ github.repository }} \
             --auto-write \
-            --file-name README_BY_MOXI.md
+            --file-name GitHub/README_BY_MOXI.md
       
       - name: Check for changes
         id: check-changes
@@ -70,7 +73,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add README_BY_MOXI.md
-          git commit -m "docs: Auto-update README_BY_MOXI.md using Moxi [skip ci]" || exit 0
+          git add GitHub/README_BY_MOXI.md
+          git commit -m "docs: Auto-update GitHub/README_BY_MOXI.md using Moxi [skip ci]" || exit 0
           git push
 
