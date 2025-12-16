@@ -77,7 +77,7 @@ download-base-model: # Download the base model (Llama-3.1-8B)
 	cd src && PYTHONPATH=$(PYTHONPATH) python -m training_pipeline.download_model
 
 train-sft: # Train the model using Supervised Fine-Tuning (SFT)
-	cd src && PYTHONPATH=$(PYTHONPATH) python -m training_pipeline.finetune.sft_trainer
+	cd src && PYTHONPATH=$(PYTHONPATH) python -m training_pipeline.finetune.main
 
 train-dpo: # Train using Direct Preference Optimization (DPO) - Advanced
 	cd src && PYTHONPATH=$(PYTHONPATH) python -m training_pipeline.finetune.dpo_trainer
@@ -89,12 +89,13 @@ evaluate-model: # Evaluate the trained model
 # ---- Pipeline 4: Doc Generator -------
 # ======================================
 
-local-generate-docs: # Generate documentation for a repository (usage: make local-generate-docs REPO=https://github.com/user/repo)
+local-generate-docs: # Generate documentation for a repository (usage: make local-generate-docs REPO=https://github.com/user/repo [AUTO_WRITE=--auto-write])
 	@if [ -z "$(REPO)" ]; then \
 		echo "${YELLOW}Usage: make local-generate-docs REPO=https://github.com/user/repo${RESET}"; \
+		echo "${YELLOW}       make local-generate-docs REPO=https://github.com/user/repo AUTO_WRITE=--auto-write${RESET}"; \
 		exit 1; \
 	fi
-	cd src && PYTHONPATH=$(PYTHONPATH) python -m doc_generator.main --repo $(REPO)
+	cd src && PYTHONPATH=$(PYTHONPATH) python -m doc_generator.main $(AUTO_WRITE) $(REPO)
 
 compare-models: # Compare custom model vs GPT-4 (A/B testing)
 	cd src && PYTHONPATH=$(PYTHONPATH) python -m doc_generator.comparison.ab_testing
