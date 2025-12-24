@@ -1,30 +1,25 @@
 # moxi
-Last updated: 2025-12-23 10:36:09 UTC
+Last updated: 2025-12-24 04:08:29 UTC
 
-moxi is an AI-powered documentation generator that automates the creation and updating of documentation based on changes in your codebase.
+**Description:** AI-powered documentation generator with auto-update.
 
 ## How This Project Works
 
-The moxi library is designed to facilitate the generation and maintenance of documentation using AI. The architecture consists of several key components:
+The `moxi` library is designed to automate the generation of documentation for code repositories using AI. It achieves this through a series of structured components that interact in a well-defined pipeline:
 
-1. **Input Sources**: moxi analyzes the structure of your repository through various crawlers located in the `repo_analyzer` module. This can include both local and remote repositories, such as GitHub.
+1. **Repository Analysis**: The `repo_analyzer` module crawls through the codebase to gather relevant information about files, functions, and classes. It utilizes internal crawlers (e.g., GitHub and local crawlers) to extract information from various sources.
 
-2. **Data Processing**: Once the repository structure is analyzed, the `dataset_generator` component generates datasets that provide context and structure for documentation. This involves web scraping through crawlers and utilizing instruction generators.
+2. **Dataset Generation**: The `dataset_generator` module collects data from various sources, including trending repositories and curated lists. It uses dedicated crawlers to ensure that the data is up-to-date and relevant for documentation purposes.
 
-3. **Documentation Generation**: The `doc_generator` module utilizes the OpenAI API to generate documentation based on the analyzed data and datasets. It uses language models to create coherent and contextually relevant documentation.
+3. **Documentation Generation**: The `doc_generator` module takes the processed data and generates comprehensive documentation. It leverages language models like OpenAI's GPT to create human-like text, which is then formatted into Markdown.
 
-4. **Quality Control**: The library includes quality control mechanisms to ensure the generated documentation is accurate and free from duplicates.
+4. **Auto-update Mechanism**: The workflow is set up using GitHub Actions, which triggers the documentation generation process automatically whenever changes are pushed to the repository. This ensures that the documentation remains current without manual intervention.
 
-5. **Auto-update Mechanism**: The integration with GitHub Actions allows for automatic commits and pushes of the generated documentation whenever code changes are made to the repository.
-
-The data flow can be summarized as follows:
-- **Input**: Codebase changes → Repository analysis → Dataset generation
-- **Processing**: Data is analyzed and structured → Documentation is generated using AI
-- **Output**: Updated documentation is committed back to the repository
+5. **Quality Control**: The system includes quality control measures to validate and deduplicate the generated content, ensuring that the final documentation is both accurate and succinct.
 
 ## How to Use
 
-### Step-by-Step Instructions
+### Step-by-step Instructions
 
 1. **Clone the Repository**:
    ```bash
@@ -33,57 +28,76 @@ The data flow can be summarized as follows:
    ```
 
 2. **Set Up Environment**:
-   Create a `.env` file based on `.env.example` and add your OpenAI API key:
-   ```bash
-   cp .env.example .env
-   ```
+   - Make sure you have Python 3.11 or higher installed.
+   - Install dependencies using Poetry:
+     ```bash
+     poetry install
+     ```
 
-3. **Install Dependencies**:
-   Use Poetry to install the required dependencies:
-   ```bash
-   poetry install
-   ```
+3. **Configuration**:
+   - Create a `.env` file based on the `.env.example` file and add your OpenAI API key:
+     ```
+     OPENAI_API_KEY=your_openai_api_key
+     ```
 
-4. **Run the Documentation Generator**:
-   Execute the main script for documentation generation:
+4. **Run the Documentation Generation**:
    ```bash
    poetry run python src/doc_generator/main.py
    ```
 
-### Command-line Examples
-- To analyze a local repository:
-  ```bash
-  poetry run python src/repo_analyzer/main.py --path /path/to/local/repo
-  ```
+5. **Trigger Auto-update**:
+   - Push changes to your repository. The documentation will be automatically updated via GitHub Actions.
 
-- To generate documentation:
-  ```bash
-  poetry run python src/doc_generator/main.py --output README_BY_MOXI.md
-  ```
+### Command-line Examples
+
+To manually trigger documentation generation, you can run:
+```bash
+poetry run python src/doc_generator/main.py --path <path_to_your_code>
+```
 
 ### Configuration Options
-- You can configure the output file and the repository path via command-line arguments.
+
+- You can specify the path to analyze using the `--path` argument.
+- Additional configuration options can be added in the future for more granular control over the documentation generation.
 
 ### Common Use Cases
-- Continuous documentation updates for large codebases.
-- Documentation generation for open-source projects hosted on GitHub.
+
+- Automatically generating README files for new projects.
+- Keeping documentation in sync with code changes.
+- Analyzing large codebases for comprehensive documentation.
 
 ## Features
-- Automatic documentation generation using AI.
-- Supports local and GitHub repository analysis.
-- Quality control for generated documentation.
-- Integration with GitHub Actions for automated updates.
-- Customizable through command-line parameters.
+
+- **AI-Powered**: Utilizes state-of-the-art language models to generate human-like documentation.
+- **Auto-Update**: Automatically updates documentation on code changes through GitHub Actions.
+- **Quality Control**: Includes deduplication and validation mechanisms to ensure high-quality output.
+- **Flexible Architecture**: Modular design allowing for easy extensions and modifications.
+- **Support for Multiple Repositories**: Can analyze and document multiple repositories seamlessly.
 
 ## Installation Instructions
 
-To install moxi, clone the repository and install the dependencies using Poetry:
+1. Ensure you have Python 3.11 or higher installed on your machine.
+2. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/moxi.git
+   ```
+3. Navigate to the project directory:
+   ```bash
+   cd moxi
+   ```
+4. Install dependencies using Poetry:
+   ```bash
+   poetry install
+   ```
 
+## Usage Examples
+
+Here's how you can invoke the main documentation generation script:
 ```bash
-git clone https://github.com/yourusername/moxi.git
-cd moxi
-poetry install
+poetry run python src/doc_generator/main.py
 ```
+
+You can also specify different modules or paths to customize the documentation generation.
 
 ## Project Structure
 ```
@@ -109,16 +123,3 @@ poetry install
 │   │   │   ├── __init__.py
 │   │   │   ├── awesome_lists.py
 │   │   │   └── github_trending.py
-│   │   ├── generators/
-│   │   │   ├── __init__.py
-│   │   │   └── instruction_gen.py
-│   │   ├── main.py
-│   │   ├── quality_control/
-│   │   │   ├── __init__.py
-│   │   │   ├── deduplicator.py
-│   │   │   └── validator.py
-│   │   └── utils.py
-│   ├── doc_generator/
-│   │   ├── __init__.py
-│   │   ├── core.py
-│   │   ├──
