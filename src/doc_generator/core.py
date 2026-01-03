@@ -65,6 +65,7 @@ def generate_single_doc(
                 return {
                     "repo_url": repo_url,
                     "readme_content": readme_content,
+                    "file_name": file_name,  # Add file_name even on failure
                     "written": False,
                     "error": "Failed to write via GitHub API",
                 }

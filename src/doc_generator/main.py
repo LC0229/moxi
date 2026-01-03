@@ -69,7 +69,13 @@ def main() -> None:
         
         if result:
             if args.auto_write:
-                print(f"✅ Successfully generated and wrote {result['file_name']} to {args.repo_urls[0]}")
+                file_name = result.get('file_name', args.file_name)  # Use file_name from result or fallback to args
+                if result.get('written', False):
+                    print(f"✅ Successfully generated and wrote {file_name} to {args.repo_urls[0]}")
+                else:
+                    print(f"⚠️  Generated {file_name} but failed to write to {args.repo_urls[0]}")
+                    if result.get('error'):
+                        print(f"   Error: {result['error']}")
             else:
                 # Write to local file
                 if args.output:
