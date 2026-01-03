@@ -1,27 +1,22 @@
-# moxi  
-Last updated: 2026-01-03 04:01:58 UTC
+# moxi Last updated: 2026-01-03 04:42:46 UTC
 
 ## Description
-moxi is an AI-powered documentation generator that automatically updates documentation based on code changes. It leverages advanced language models to analyze code structures and generate clear, comprehensive documentation.
+moxi is an AI-powered documentation generator that automatically updates itself based on code changes. It leverages advanced language models to create comprehensive documentation from your codebase, ensuring that your project documentation stays current and relevant.
 
 ## How This Project Works
-The moxi library is structured around several key components that work together to automate documentation generation:
+The architecture of moxi is built around several key components that work together to generate and update documentation efficiently:
 
-1. **Core Components**: The core module contains configuration management, error handling, and logging utilities.
-2. **Dataset Generator**: 
-   - This module includes various crawlers that collect relevant datasets from platforms like GitHub, and generates instructions for documentation.
-   - Quality control utilities ensure that the generated datasets are valid and free of duplicates.
-3. **Document Generator**: 
-   - The document generation logic is based on language models, specifically leveraging OpenAI's API for generating human-like text.
-   - It processes the collected data and formats it into readable documentation.
-4. **Repository Analyzer**: This module analyzes code repositories, extracting information about file structures and contents to enhance the documentation process.
-5. **Training Pipeline**: 
-   - This section allows for fine-tuning of models on specific datasets, ensuring that the documentation generated is tailored to the specific needs of the project.
+1. **Core Components**: The `core` module contains essential functionalities including configuration management, error handling, and logging utilities.
 
-### Data Flow
-1. **Input**: The user initiates the process, typically through the command line.
-2. **Processing**: The system crawls the repository, gathers data, and uses the AI model to generate documentation.
-3. **Output**: The generated documentation is saved as `README_BY_MOXI.md`, which can be committed back to the repository automatically.
+2. **Dataset Generation**: The `dataset_generator` module is responsible for creating datasets that are used for training and fine-tuning the documentation generation models. It includes crawlers for gathering data from various sources (e.g., Awesome Lists, GitHub Trending) and ensures quality control through deduplication and validation processes.
+
+3. **Documentation Generation**: The `doc_generator` module utilizes language models (such as those from OpenAI) to generate documentation. It analyzes the repository structure and automatically creates markdown files that describe the functionality of the code.
+
+4. **Repository Analysis**: The `repo_analyzer` module inspects the codebase to gather insights about the project's structure and components. It includes crawlers for fetching data from GitHub and local repositories, and parsers for analyzing files and building a code tree.
+
+5. **Training Pipeline**: The `training_pipeline` module is designed for fine-tuning language models to improve their performance in generating documentation. It includes configuration settings and scripts for training the models.
+
+The overall data flow starts with the repository analysis, where moxi gathers information about the code structure. This information is then processed by the dataset generator and passed to the documentation generator, ultimately producing up-to-date documentation.
 
 ## How to Use
 
@@ -33,58 +28,64 @@ The moxi library is structured around several key components that work together 
    ```
 
 2. **Install Dependencies**:
-   Ensure you have Python 3.11 or higher installed, then run:
+   Ensure you have Python 3.11 or higher installed. Use Poetry for managing dependencies:
    ```bash
-   pip install -r requirements.txt  # Or use poetry install
+   poetry install
    ```
 
-3. **Set Up Environment Variables**:
+3. **Configure Environment Variables**:
    Create a `.env` file based on `.env.example` and add your OpenAI API key:
-   ```env
+   ```
    OPENAI_API_KEY=your_openai_api_key
    ```
 
-4. **Run the Document Generation**:
-   Execute the main script to generate documentation:
+4. **Run the Documentation Generator**:
+   Use the command line to generate documentation:
    ```bash
-   python src/doc_generator/main.py
+   poetry run python src/doc_generator/main.py
    ```
 
-5. **Check Generated Documentation**:
-   After running the script, check the `README_BY_MOXI.md` file in your repository for the generated documentation.
-
-### Command-Line Example
-```bash
-python src/doc_generator/main.py --input-path path/to/your/code --output-path README_BY_MOXI.md
-```
+### Command-Line Examples
+- Generate documentation:
+  ```bash
+  poetry run python src/doc_generator/main.py
+  ```
 
 ### Configuration Options
-- `--input-path`: Specify the path to the code repository you want to analyze.
-- `--output-path`: Define where the generated documentation should be saved.
+- For additional configuration options, refer to the `config.py` file in the `core` module. You can customize logging levels, paths, and other parameters.
 
 ### Common Use Cases
-- Automatically generating and updating project documentation with every code update.
-- Analyzing code structure and producing documentation for onboarding new team members.
+- Automatic documentation generation for new projects.
+- Regular updates to existing documentation after code modifications.
+- Training documentation models using custom datasets.
 
 ## Features
-- AI-powered documentation generation
-- Auto-update functionality on code changes
-- Comprehensive dataset generation from various sources
-- Quality control to ensure valid documentation
-- Flexible configuration options for different use cases
-
+- Automatically generates and updates README files.
+- Integrates with GitHub Actions for CI/CD.
+- Utilizes advanced AI models for high-quality documentation generation.
+- Supports dataset generation from various sources.
+- Includes quality control mechanisms for generated datasets.
+  
 ## Installation Instructions
 To install moxi, follow these steps:
-1. Ensure you have Python 3.11 or higher.
+
+1. Ensure you have Python 3.11 or higher installed on your machine.
 2. Clone the repository:
    ```bash
    git clone https://github.com/yourusername/moxi.git
    cd moxi
    ```
-3. Install dependencies with Poetry:
+3. Install dependencies using Poetry:
    ```bash
    poetry install
    ```
+
+## Usage Examples
+After installation, you can use moxi to generate documentation by running the following command:
+```bash
+poetry run python src/doc_generator/main.py
+```
+This command will analyze your codebase and generate the `README_BY_MOXI.md` file, which will be updated automatically with your code changes.
 
 ## Project Structure
 ```
@@ -109,9 +110,4 @@ To install moxi, follow these steps:
 │   │   ├── crawlers/
 │   │   │   ├── __init__.py
 │   │   │   ├── awesome_lists.py
-│   │   │   └── github_trending.py
-│   │   ├── generators/
-│   │   │   ├── __init__.py
-│   │   │   └── instruction_gen.py
-│   │   ├── main.py
-│   │   ├
+│   │   │   └──
