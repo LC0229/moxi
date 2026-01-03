@@ -101,6 +101,13 @@ compare-models: # Compare custom model vs GPT-4 (A/B testing)
 	cd src && PYTHONPATH=$(PYTHONPATH) python -m doc_generator.comparison.ab_testing
 
 # ======================================
+# ---------- Web UI (Gradio) -----------
+# ======================================
+
+web-ui: # Launch Gradio web UI for easy setup
+	cd src && PYTHONPATH=$(PYTHONPATH) python -m web_ui.main
+
+# ======================================
 # --------- Pipeline 5: CLI ------------
 # ======================================
 
@@ -206,6 +213,7 @@ run-full-pipeline: # Run the complete pipeline end-to-end (WARNING: This takes h
         generate-training-dataset crawl-github-repos validate-dataset \
         download-base-model train-sft train-dpo evaluate-model \
         local-generate-docs compare-models cli-help cli-generate cli-analyze \
+        web-ui \
         docker-build docker-up docker-down docker-logs \
         test test-unit test-integration lint format format-check \
         clean clean-data run-full-pipeline

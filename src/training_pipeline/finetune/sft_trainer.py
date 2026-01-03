@@ -14,6 +14,7 @@ from trl import SFTTrainer
 
 from core import get_logger, settings
 from training_pipeline.finetune.lora_config import LoRAConfig
+from training_pipeline.finetune.comet_tracker import CometTracker
 
 logger = get_logger(__name__)
 
@@ -165,6 +166,34 @@ class SFTTrainerWrapper:
                    train_size=len(train_dataset),
                    eval_size=len(eval_dataset))
         
+        # Initialize Comet ML tracker
+        comet_tracker = CometTracker(
+            experiment_name=f"sft-{Path(output_dir).name}",
+        )
+        
+        # Log hyperparameters
+        comet_tracker.log_hyperparameters({
+            "model_name": self.model_name,
+            "learning_rate": learning_rate,
+            "num_train_epochs": num_train_epochs,
+            "per_device_train_batch_size": per_device_train_batch_size,
+            "gradient_accumulation_steps": gradient_accumulation_steps,
+            "max_seq_length": self.max_seq_length,
+            "lora_r": self.lora_config.r,
+            "lora_alpha": self.lora_config.lora_alpha,
+            "lora_dropout": self.lora_config.lora_dropout,
+            "load_in_4bit": self.load_in_4bit,
+        })
+        
+        # Determine reporting backend
+        report_to = []
+        if settings.COMET_API_KEY:
+            report_to.append("comet_ml")
+        if settings.WANDB_API_KEY:
+            report_to.append("wandb")
+        if not report_to:
+            report_to = None
+        
         # Training arguments
         training_args = TrainingArguments(
             output_dir=output_dir,
@@ -178,7 +207,7 @@ class SFTTrainerWrapper:
             save_strategy=save_strategy,
             eval_strategy="epoch",
             load_best_model_at_end=True,
-            report_to="wandb" if settings.WANDB_API_KEY else None,
+            report_to=report_to,
             warmup_steps=100,
             weight_decay=0.01,
             lr_scheduler_type="cosine",
@@ -208,6 +237,10 @@ class SFTTrainerWrapper:
         
         self.trainer.save_model(str(final_model_dir))
         self.tokenizer.save_pretrained(str(final_model_dir))
+        
+        # Log model to Comet ML
+        comet_tracker.log_model(str(final_model_dir))
+        comet_tracker.end()
         
         logger.info("Training complete", final_model=str(final_model_dir))
         

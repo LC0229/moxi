@@ -70,8 +70,11 @@ def extract_repo_owner_and_name(github_url: str) -> tuple[str, str]:
     """
     Extract owner and repository name from a GitHub URL.
     
+    This function only extracts the owner and repo name, ignoring any path,
+    query parameters, or fragments that may follow.
+    
     Args:
-        github_url: A GitHub repository URL
+        github_url: A GitHub repository URL (may include paths, query params, etc.)
         
     Returns:
         A tuple of (owner, repo_name)
@@ -82,24 +85,48 @@ def extract_repo_owner_and_name(github_url: str) -> tuple[str, str]:
     Example:
         >>> extract_repo_owner_and_name("https://github.com/pytorch/pytorch")
         ('pytorch', 'pytorch')
+        >>> extract_repo_owner_and_name("https://github.com/user/repo/.github/workflows")
+        ('user', 'repo')
+        >>> extract_repo_owner_and_name("https://github.com/user/repo.git?branch=main")
+        ('user', 'repo')
     """
     if not validate_github_url(github_url):
         raise ImproperlyConfigured(f"Invalid GitHub URL: {github_url}")
     
-    # Clean the URL
+    # Clean the URL - remove trailing slashes, query params, fragments, and .git
     url = github_url.rstrip("/")
+    
+    # Remove query parameters and fragments
+    if "?" in url:
+        url = url.split("?")[0]
+    if "#" in url:
+        url = url.split("#")[0]
+    
+    # Remove .git suffix if present
+    url = url.replace(".git", "")
     
     # Handle different URL formats
     if url.startswith("git@github.com:"):
-        # git@github.com:user/repo.git
-        parts = url.replace("git@github.com:", "").replace(".git", "").split("/")
+        # git@github.com:user/repo
+        path_part = url.replace("git@github.com:", "")
     else:
-        # https://github.com/user/repo
-        parts = url.split("github.com/")[1].replace(".git", "").split("/")
+        # https://github.com/user/repo or https://github.com/user/repo/path/to/file
+        if "github.com/" not in url:
+            raise ImproperlyConfigured(f"Cannot find 'github.com/' in URL: {github_url}")
+        path_part = url.split("github.com/")[1]
+    
+    # Split path and only take first two parts (owner and repo)
+    # Ignore any additional path segments
+    parts = [p for p in path_part.split("/") if p]  # Filter out empty strings
     
     if len(parts) < 2:
-        raise ImproperlyConfigured(f"Cannot extract owner and name from: {github_url}")
+        raise ImproperlyConfigured(
+            f"Cannot extract owner and name from: {github_url}. "
+            f"Expected format: https://github.com/owner/repo"
+        )
     
+    # Only take the first two parts (owner and repo_name)
+    # Ignore any additional path segments (e.g., .github/workflows)
     owner = parts[0]
     repo_name = parts[1]
     

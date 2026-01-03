@@ -42,6 +42,20 @@ class AppSettings(BaseSettings):
     COMET_WORKSPACE: str | None = None
     COMET_PROJECT: str = "moxi"
     
+    # Qdrant config (for RAG vector database)
+    QDRANT_DATABASE_HOST: str = "localhost"
+    QDRANT_DATABASE_PORT: int = 6333
+    USE_QDRANT_CLOUD: bool = False
+    QDRANT_CLOUD_URL: str | None = None
+    QDRANT_APIKEY: str | None = None
+    
+    # RabbitMQ config (for task queue)
+    RABBITMQ_DEFAULT_USERNAME: str = "guest"
+    RABBITMQ_DEFAULT_PASSWORD: str = "guest"
+    RABBITMQ_HOST: str = "localhost"
+    RABBITMQ_PORT: int = 5672
+    RABBITMQ_QUEUE_NAME: str = "moxi_doc_generation"
+    
     # AWS config (for cloud deployment - optional)
     AWS_REGION: str = "us-east-1"
     AWS_ACCESS_KEY: str | None = None
