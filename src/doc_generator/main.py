@@ -21,7 +21,7 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--auto-write",
         action="store_true",
-        help="Automatically write README to repository via GitHub API",
+        help="Automatically write architecture diagram to repository via GitHub API",
     )
     parser.add_argument(
         "--output",
@@ -32,8 +32,8 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--file-name",
         type=str,
-        default="README_BY_MOXI.md",
-        help="Name of the file to write (default: README_BY_MOXI.md)",
+        default="ARCHITECTURE_BY_MOXI.md",
+        help="Name of the file to write (default: ARCHITECTURE_BY_MOXI.md)",
     )
     parser.add_argument(
         "--concurrent",
@@ -82,14 +82,14 @@ def main() -> None:
                     output_dir = Path(args.output)
                     ensure_dir_exists(output_dir)
                     output_file = output_dir / result["file_name"]
-                    output_file.write_text(result["readme_content"], encoding="utf-8")
+                    output_file.write_text(result["architecture_content"], encoding="utf-8")
                     print(f"✅ Generated {result['file_name']} saved to {output_file}")
                 else:
                     # Print to stdout
                     print("\n" + "=" * 70)
-                    print("Generated README:")
+                    print("Generated Architecture Diagram:")
                     print("=" * 70)
-                    print(result["readme_content"])
+                    print(result["architecture_content"])
         else:
             print(f"❌ Failed to generate documentation for {args.repo_urls[0]}")
             return
@@ -107,7 +107,7 @@ def main() -> None:
         successful = [r for r in results if r]
         failed = len(args.repo_urls) - len(successful)
         
-        print(f"\n✅ Successfully generated {len(successful)}/{len(args.repo_urls)} READMEs")
+        print(f"\n✅ Successfully generated {len(successful)}/{len(args.repo_urls)} architecture diagrams")
         if failed > 0:
             print(f"❌ Failed to generate {failed} READMEs")
         

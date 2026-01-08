@@ -148,7 +148,7 @@ def create_gradio_interface():
             3. Click "Fetch Repositories" to see all your repos
             4. Select the repositories you want to enable auto-documentation
             5. Click "Setup Workflows" to automatically add GitHub Actions workflows
-            6. Done! Every time you push code, README_BY_MOXI.md will be automatically updated
+            6. Done! Every time you push code, ARCHITECTURE_BY_MOXI.md will be automatically updated
             
             ## Requirements:
             - GitHub Personal Access Token with `repo` scope
@@ -210,7 +210,7 @@ def create_gradio_interface():
             """
             ---
             ## 📝 Notes:
-            - The workflow will generate `README_BY_MOXI.md` (not overwrite your existing README.md)
+            - The workflow will generate `ARCHITECTURE_BY_MOXI.md` (architecture diagram, not README)
             - Make sure to add `OPENAI_API_KEY` as a secret in each repository's settings
             - The workflow triggers on pushes to `main`/`master` branches when code files change
             - You can manually trigger the workflow from the Actions tab
@@ -222,14 +222,25 @@ def create_gradio_interface():
 
 def main():
     """Main entry point for Gradio app."""
+    import socket
+    
+    def find_free_port(start_port=7860, max_attempts=10):
+        """Find a free port starting from start_port."""
+        for i in range(max_attempts):
+            port = start_port + i
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                if s.connect_ex(('localhost', port)) != 0:
+                    return port
+        return None  # Fallback to let Gradio find a port
+    
     app = create_gradio_interface()
+    port = find_free_port(7860) or 0  # 0 means let Gradio find a port automatically
     app.launch(
         server_name="0.0.0.0",
-        server_port=7860,
+        server_port=port,
         share=False,  # Set to True to create a public link
-        theme=gr.themes.Soft(),  # Theme moved here (Gradio 6.0+)
-        # Note: reload parameter is not available in all Gradio versions
-        # Use environment variable GRADIO_RELOAD=1 for auto-reload instead
+        # Note: theme parameter is not available in Gradio 4.x launch()
+        # To use themes in Gradio 4.x, set it when creating Blocks: gr.Blocks(theme=gr.themes.Soft())
     )
 
 
