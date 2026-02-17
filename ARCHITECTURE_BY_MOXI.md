@@ -1,19 +1,37 @@
 # Architecture Diagram
-Last updated: 2026-01-08 01:12:55 UTC
+Last updated: 2026-02-17 23:05:43 UTC
 
 ```mermaid
 graph TB
-    User[User] --> API[API Server]
-    User --> Web[Web Server]
-    API --> Logic[Business Logic]
-    Web --> Logic
-    Logic --> DB[(MongoDB)]
-    Logic --> Cache[(Cache)]
-    Logic --> Queue[(Message Queue)]
-    Queue --> Worker[Worker]
-    Logic --> Storage[(Object Storage)]
+    Cache[(Cache)] --> Cache1[(Cache)]
+    Cache1 --> Cache2[(Cache)]
+    Cache2 --> Cache3[(Cache)]
+    Cache3 --> Queue[(Queue)]
+    Cache1 --> Cache4[(Cache)]
+    Cache4 --> Cache5[(Cache)]
+    Cache5 --> Cache6[(Cache)]
+    Cache6 --> Cache7[(Cache)]
+    Cache7 --> Cache8[(Cache)]
+    Cache8 --> Cache9[(Cache)]
+    Cache9 --> Cache10[(Cache)]
+    Cache10 --> Cache11[(Cache)]
+    Cache11 --> Cache12[(Cache)]
+    Cache12 --> Cache13[(Cache)]
+    Cache13 --> Cache14[(Cache)]
+    Cache14 --> Cache15[(Cache)]
+    Cache15 --> Cache16[(Cache)]
+    Cache16 --> Cache17[(Cache)]
+    Cache17 --> Cache18[(Cache)]
+    Cache18 --> Cache19[(Cache)]
+    Cache19 --> Cache20[(Cache)]
+    Cache20 --> Cache21[(Cache)]
+    Cache21 --> Cache22[(Cache)]
+    Cache22 --> Queue
+    Cache22 --> Database[(Database)]
+    Cache22 --> Cache23[(Cache)]
+    Cache23 --> Database
 ```
 
 ## Overview
 
-The architecture consists of an API Server and a Web Server that handle user requests and direct them to the Business Logic component for processing. The Business Logic interacts with MongoDB for data persistence, utilizes Cache for improved performance, and communicates with a Message Queue for asynchronous task management, which is processed by Worker components. Additionally, the Business Logic can store files in Object Storage, ensuring efficient handling of large data assets.
+The architecture consists of a Cache layer that facilitates fast data retrieval and a Database for persistent storage. Data flows through multiple Cache components, which optimize access speed before reaching a Queue for asynchronous processing. The final Cache component also interacts with the Database, ensuring that data is stored and retrieved efficiently.
