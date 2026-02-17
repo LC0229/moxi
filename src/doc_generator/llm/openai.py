@@ -6,7 +6,7 @@ from typing import Optional
 from openai import OpenAI
 
 from core import get_logger, settings
-from repo_analyzer import RepositoryInfo
+from moxi_analyzer import RepositoryInfo
 from doc_generator.utils import (
     read_project_metadata,
     read_key_file_content,
@@ -94,7 +94,7 @@ class OpenAIDocGenerator:
         Generate README content for a repository.
         
         Args:
-            repo_info: Repository information from repo_analyzer
+            repo_info: Repository information from moxi_analyzer
             
         Returns:
             Generated README content in Markdown format, or None if failed

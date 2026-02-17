@@ -1,302 +1,121 @@
 # Moxi
 
-**AI-Powered Documentation Generator with Continuous Learning**
-
-Moxi is an intelligent documentation generator that analyzes GitHub repositories and creates high-quality, comprehensive documentation using fine-tuned Large Language Models. Moxi implements a complete ML pipeline from data collection to model deployment, with automatic documentation updates on every code push.
+**AI-powered README generator** — collect READMEs from GitHub, build an SFT dataset, fine-tune a model (LoRA), and generate READMEs from a repo’s file structure.
 
 ---
 
-## What Does Moxi Do?
+## What Moxi does
 
-Moxi automates the tedious process of writing documentation by:
-1. **Analyzing** your codebase structure and key files
-2. **Understanding** your project's architecture and purpose
-3. **Generating** professional README files, architecture docs, and API documentation
-4. **Auto-updating** documentation when code changes
-
----
-
-## Key Features
-
-- **Custom Fine-Tuned Model** - Train your own Llama-3.1-8B specialized for documentation
-- **Automated Dataset Generation** - Create training data from 10,000+ GitHub repositories
-- **Intelligent Repository Analysis** - Parse and understand project structures
-- **Multi-Format Documentation** - Generate README, ARCHITECTURE, API docs
-- **A/B Testing** - Compare your model against GPT-4
-- **Docker Ready** - Easy deployment with Docker Compose
-- **CLI Tool** - Simple command-line interface
-- **Auto-Update on Push** - Automatically detect code changes and update documentation
+- **Collect** READMEs + file trees from awesome-readme-style lists → `data/collection/`
+- **Chunk** READMEs for training → `data/chunks/`
+- **Generate SFT dataset** (instruction + input + content) via GPT → `data/sft/`
+- **Train** a base LLM (e.g. Llama-3.2-3B) with LoRA → model in `models/`
+- **Generate docs** for a repo (doc_generator, CLI, web UI)
 
 ---
 
-## Architecture
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                     MOXI PIPELINE                            │
-└─────────────────────────────────────────────────────────────┘
-
-1. REPO ANALYZER
-    ├── GitHub Crawler
-    ├── Structure Parser
-    └── File Analyzer
-    
-2. DATASET GENERATOR
-    ├── GitHub Trending Crawler
-    ├── Instruction Generator (GPT-4)
-    └── Quality Control
-    
-3. TRAINING PIPELINE
-    ├── SFT Trainer (LoRA/QLoRA)
-    ├── Experiment Tracking (W&B)
-    └── Model Evaluation
-    
-4. DOC GENERATOR
-    ├── Custom Model Inference
-    ├── Format & Validate
-    └── Export Markdown
-    
-5. CLI & EVALUATION
-    ├── Command-Line Interface
-    └── A/B Testing Framework
-```
-
----
-
-## Quick Start
+## Quick start
 
 ### Prerequisites
 
 - Python 3.11+
-- OpenAI API Key (for dataset generation)
-- Hugging Face Token (for model training)
-- GitHub Token (for repo crawling)
+- **OpenAI API key** (for SFT dataset generation)
+- **Hugging Face token** (for base model; set in `.env` for training)
+- **GitHub token** (optional; for crawling)
 
-### Installation
+### Install
 
 ```bash
-# Clone the repository
 git clone https://github.com/LC0229/moxi.git
 cd moxi
-
-# Create virtual environment
-python -m venv moxi
-source moxi/bin/activate  # On Windows: moxi\Scripts\activate
-
-# Install dependencies
+python -m venv .venv && source .venv/bin/activate   # or: poetry shell
 make install
-
-# Copy and configure environment variables
-cp .env.example .env
-# Edit .env with your API keys
+cp .env.example .env   # edit with API keys
 ```
 
-### Basic Usage
+### Pipeline (collect → chunk → SFT → train)
 
 ```bash
-# Test configuration
-make test-config
+# 1. Collect READMEs (optional: start MongoDB first: docker compose up -d mongodb)
+make moxi-collect
 
-# Analyze a repository
-make local-analyze-repo REPO=https://github.com/pytorch/pytorch
+# 2. Chunk READMEs
+make moxi-chunk
 
-# Generate documentation (using pre-trained model)
-make local-generate-docs REPO=https://github.com/pytorch/pytorch
+# 3. Build SFT dataset (needs OPENAI_API_KEY in .env)
+make generate-sft-dataset
+
+# 4. Train (local GPU)
+make moxi-train
 ```
+
+### Train on AWS (SageMaker)
+
+Set in `.env`: `AWS_S3_BUCKET`, `AWS_ARN_ROLE`, `HUGGINGFACE_ACCESS_TOKEN`. Then:
+
+```bash
+poetry install --with aws
+make train-aws
+```
+
+See **docs/AWS_TRAINING_FLOW_NOW.md** for the full flow.
 
 ---
 
-## Full Pipeline
-
-### Step 1: Generate Training Dataset
-
-```bash
-# Crawl 100+ high-quality GitHub repositories
-make crawl-github-repos
-
-# Generate 10,000 training samples using GPT-4
-make generate-training-dataset
-
-# Validate dataset quality
-make validate-dataset
-```
-
-**Cost:** ~$20-30 in OpenAI API credits
-
-### Step 2: Train Your Model
-
-```bash
-# Download base Llama-3.1-8B model
-make download-base-model
-
-# Train with Supervised Fine-Tuning (SFT)
-make train-sft
-
-# Evaluate model performance
-make evaluate-model
-```
-
-**Time:** 4-8 hours on GPU (AWS g5.2xlarge recommended)
-
-### Step 3: Generate Documentation
-
-```bash
-# Use your trained model
-make local-generate-docs REPO=https://github.com/user/repo
-
-# Compare with GPT-4 baseline
-make compare-models
-```
-
----
-
-## Development
-
-### Project Structure
+## Project layout
 
 ```
 moxi/
 ├── src/
-│   ├── core/               # Configuration, logging, utilities
-│   ├── repo_analyzer/      # GitHub crawler & parser
-│   ├── dataset_generator/  # Training data creation
-│   ├── training_pipeline/  # Model training & evaluation
-│   ├── doc_generator/      # Documentation generation
-│   └── cli/                # Command-line interface
-├── tests/
-│   ├── unit/
-│   └── integration/
-├── data/                   # Downloaded repositories
-├── training_data/          # Generated datasets
-├── models/                 # Trained models
-└── Makefile               # All commands
-```
-
-### Running Tests
-
-```bash
-# Run all tests
-make test
-
-# Run specific test suites
-make test-unit
-make test-integration
-```
-
-### Code Quality
-
-```bash
-# Lint code
-make lint
-
-# Format code
-make format
+│   ├── moxi_collect/    # Step 1: collect READMEs
+│   ├── moxi_chunk/      # Step 2: chunk + repo analysis
+│   ├── moxi_train/      # SFT training + SFT dataset generation
+│   ├── moxi_data/       # Crawl URLs, review UI, validate data
+│   ├── moxi_analyzer/   # Repo analysis (re-export)
+│   ├── doc_generator/   # Generate docs for a repo
+│   ├── core/            # Config, logging, DB
+│   └── cli/             # Command-line interface
+├── data/                # Pipeline data (collection, chunks, sft)
+├── models/              # Trained checkpoints
+├── docs/                # Detailed docs (training, AWS, Docker, MongoDB)
+├── TRAINING_WORKFLOW.md # End-to-end training workflow
+└── Makefile
 ```
 
 ---
 
-## Dataset & Training
+## Commands
 
-### Dataset Statistics
+| Command | Description |
+|--------|-------------|
+| `make moxi-collect` | Collect READMEs → `data/collection/` |
+| `make moxi-chunk` | Chunk READMEs → `data/chunks/` |
+| `make generate-sft-dataset` | Chunks → SFT JSON (needs OpenAI) |
+| `make moxi-train` | Train SFT model (local) |
+| `make train-aws` | Upload data + submit SageMaker job |
+| `make pipeline-dashboard` | Dev dashboard (phases, counts) |
+| `make local-generate-docs REPO=url` | Generate docs for a repo |
 
-- **Source:** GitHub repositories (100+ stars)
-- **Size:** 10,000+ instruction-output pairs
-- **Format:** JSON with instruction, input, output fields
-- **Quality:** Validated by GPT-4 + human review
-
-### Training Configuration
-
-- **Base Model:** Meta Llama-3.1-8B-Instruct
-- **Method:** Supervised Fine-Tuning (SFT) with LoRA
-- **Hyperparameters:**
-  - Learning Rate: 2e-4
-  - Batch Size: 4 (per device)
-  - Gradient Accumulation: 4 steps
-  - Epochs: 3
-  - Max Sequence Length: 2048 tokens
-
-### Hardware Requirements
-
-- **Training:** GPU with 16GB+ VRAM (NVIDIA A10G, V100, or better)
-- **Inference:** GPU with 8GB+ VRAM or CPU (slower)
+Run **`make help`** for all targets.
 
 ---
 
-## Docker Deployment
+## Docs
 
-```bash
-# Build containers
-make docker-build
-
-# Start services
-make docker-up
-
-# View logs
-make docker-logs
-
-# Stop services
-make docker-down
-```
-
----
-
-## CLI Usage
-
-```bash
-# Generate documentation
-python -m cli.main generate https://github.com/user/repo
-
-# Analyze repository structure
-python -m cli.main analyze https://github.com/user/repo
-
-# Evaluate model performance
-python -m cli.main evaluate --compare custom vs gpt4
-```
-
----
-
-## Roadmap
-
-- [x] Phase 0: Project Setup
-- [x] Phase 1: Core Infrastructure
-- [ ] Phase 2: Repository Analyzer
-- [ ] Phase 3: Dataset Generator
-- [ ] Phase 4: Training Pipeline
-- [ ] Phase 5: Documentation Generator
-- [ ] Phase 6: CLI & Evaluation
-- [ ] Phase 7: Docker & Deployment
-- [ ] Phase 8: Documentation & Demo
-
----
-
-## Contributing
-
-Contributions are welcome! Please:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+- **TRAINING_WORKFLOW.md** — Full pipeline, phases, and how to run each step
+- **docs/AWS_TRAINING_FLOW_NOW.md** — SageMaker training flow
+- **docs/HOW_TRAINING_WORKS.md** — How training and SFT dataset work
+- **docs/DOCKER.md** — MongoDB and other services
+- **data/README.md** — Data folder layout
 
 ---
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## Acknowledgments
-
-- Built with [Llama-3.1-8B](https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct)
-- Powered by Hugging Face Transformers, PEFT, and TRL
+MIT. See [LICENSE](LICENSE).
 
 ---
 
 ## Contact
 
-- **Author:** Shengrui Chen
-- **Email:** chenleon572@gmail.com
-- **GitHub:** [@LC0229](https://github.com/LC0229)
-
+**Shengrui Chen** — [@LC0229](https://github.com/LC0229) · chenleon572@gmail.com

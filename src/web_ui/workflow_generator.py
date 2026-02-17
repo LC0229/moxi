@@ -7,8 +7,8 @@ import requests
 from core import get_logger
 from core.lib import extract_repo_owner_and_name
 from doc_generator.writer import write_to_repo_via_api
-from repo_analyzer import analyze_repository
-from repo_analyzer.models import ProjectLanguage
+from moxi_analyzer import analyze_repository
+from moxi_analyzer.models import ProjectLanguage
 
 logger = get_logger(__name__)
 

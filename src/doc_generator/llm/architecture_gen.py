@@ -5,8 +5,8 @@ from typing import Optional
 from openai import OpenAI
 
 from core import get_logger, settings
-from repo_analyzer import RepositoryInfo
-from repo_analyzer.architecture.analyzer import analyze_architecture_with_rules
+from moxi_analyzer import RepositoryInfo
+from moxi_analyzer.architecture.analyzer import analyze_architecture_with_rules
 
 logger = get_logger(__name__)
 
@@ -36,7 +36,7 @@ class ArchitectureGenerator:
         Generate architecture diagram (Mermaid format) for a repository.
         
         Args:
-            repo_info: Repository information from repo_analyzer
+            repo_info: Repository information from moxi_analyzer
             
         Returns:
             Generated architecture document in Markdown format with Mermaid diagram, or None if failed

@@ -109,16 +109,16 @@ def main() -> None:
         
         print(f"\n✅ Successfully generated {len(successful)}/{len(args.repo_urls)} architecture diagrams")
         if failed > 0:
-            print(f"❌ Failed to generate {failed} READMEs")
+            print(f"❌ Failed to generate {failed} architecture diagrams")
         
         if args.output:
             output_dir = Path(args.output)
             ensure_dir_exists(output_dir)
             for i, result in enumerate(successful, 1):
                 repo_name = result["repo_url"].split("/")[-1]
-                file_name = result.get("file_name", "README_BY_MOXI.md")
+                file_name = result.get("file_name", "ARCHITECTURE_BY_MOXI.md")
                 output_file = output_dir / f"{repo_name}_{file_name}"
-                output_file.write_text(result["readme_content"], encoding="utf-8")
+                output_file.write_text(result["architecture_content"], encoding="utf-8")
                 print(f"  - {repo_name}: {output_file}")
 
 

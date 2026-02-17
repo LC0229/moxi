@@ -1,0 +1,4 @@
+# Installed in SageMaker HuggingFace container when source_dir=src (DLC has torch, transformers, datasets, peft, trl)
+pydantic>=2.0
+pydantic-settings>=2.0
+structlog>=25.0

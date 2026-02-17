@@ -1,0 +1,577 @@
+================================================================================
+PRODUCT REQUIREMENTS DOCUMENT (PRD)
+================================================================================
+Project: Moxi - AI-Powered Documentation Generator
+Version: 1.0
+Date: January 2026
+Author: Moxi Development Team
+================================================================================
+
+1. EXECUTIVE SUMMARY
+================================================================================
+
+Moxi is an AI-powered documentation generator that automatically creates and 
+maintains high-quality documentation for GitHub repositories. The system uses 
+fine-tuned Large Language Models (LLMs) to analyze codebases and generate 
+comprehensive README files, architecture documentation, and API documentation 
+with automatic updates on every code push.
+
+Key Value Propositions:
+- Automates tedious documentation writing process
+- Reduces documentation maintenance overhead by 90%
+- Provides 10x faster documentation generation compared to manual writing
+- Achieves 90% cost reduction compared to GPT-4 API usage
+- Supports continuous learning through fine-tuned models
+
+================================================================================
+2. PROBLEM STATEMENT
+================================================================================
+
+2.1 Current Pain Points
+-----------------------
+- Developers spend 20-30% of their time writing and maintaining documentation
+- Documentation quickly becomes outdated as code evolves
+- Manual documentation is inconsistent in quality and format
+- Maintaining documentation across multiple repositories is time-consuming
+- High costs associated with using GPT-4 API for documentation generation
+- Lack of specialized models for documentation generation tasks
+
+2.2 Market Opportunity
+---------------------
+- Over 100 million repositories on GitHub
+- Growing demand for automated documentation tools
+- Increasing adoption of AI-powered development tools
+- Need for cost-effective alternatives to expensive API services
+
+================================================================================
+3. TARGET USERS
+================================================================================
+
+3.1 Primary Users
+-----------------
+- Individual developers maintaining personal projects
+- Open-source project maintainers
+- Development teams in startups and enterprises
+- Technical writers seeking automation tools
+
+3.2 User Personas
+-----------------
+Persona 1: Solo Developer
+- Maintains 5-10 personal projects
+- Limited time for documentation
+- Needs quick, automated solutions
+- Cost-conscious
+
+Persona 2: Open-Source Maintainer
+- Manages multiple repositories
+- Needs consistent documentation quality
+- Values automation and efficiency
+- Requires batch processing capabilities
+
+Persona 3: Enterprise Team
+- Maintains 50+ repositories
+- Requires standardized documentation
+- Needs integration with CI/CD pipelines
+- Budget for training custom models
+
+================================================================================
+4. PRODUCT GOALS AND OBJECTIVES
+================================================================================
+
+4.1 Primary Goals
+-----------------
+1. Automate documentation generation for GitHub repositories
+2. Reduce documentation maintenance time by 90%
+3. Achieve cost savings of 90% compared to GPT-4 API
+4. Support batch processing of multiple repositories
+5. Enable continuous learning through model fine-tuning
+
+4.2 Success Metrics
+-------------------
+- Documentation generation time: < 2 minutes per repository
+- Cost per documentation generation: < $0.01 (vs $0.10 for GPT-4)
+- User satisfaction score: > 4.5/5.0
+- Adoption rate: 1000+ repositories documented in first 6 months
+- Model accuracy: > 85% user approval rate
+
+================================================================================
+5. FUNCTIONAL REQUIREMENTS
+================================================================================
+
+5.1 Core Features (MVP)
+------------------------
+
+5.1.1 Repository Analysis
+- Clone and analyze GitHub repositories
+- Detect project type (Library, Application, CLI)
+- Identify programming language (Python, JavaScript, Go, Rust)
+- Parse project structure and key files
+- Extract metadata (dependencies, configuration files)
+
+5.1.2 Documentation Generation
+- Generate comprehensive README files
+- Create architecture documentation
+- Generate API documentation (if applicable)
+- Support multiple documentation formats (Markdown)
+- Customize documentation style and content
+
+5.1.3 Auto-Update Mechanism
+- Detect code changes via GitHub Actions
+- Automatically regenerate documentation on push
+- Commit updated documentation to repository
+- Support for multiple branches
+
+5.1.4 CLI Interface
+- Command-line tool for local execution
+- Support for single repository processing
+- Batch processing capabilities
+- Configuration management
+
+5.2 Advanced Features (Post-MVP)
+--------------------------------
+
+5.2.1 Web UI
+- Gradio-based web interface
+- GitHub OAuth integration
+- Repository selection and management
+- Automated GitHub Actions workflow generation
+- One-click setup for multiple repositories
+
+5.2.2 Model Training Pipeline
+- Automated dataset generation from GitHub repositories
+- Support for supervised fine-tuning (SFT)
+- LoRA (Low-Rank Adaptation) for efficient training
+- Model evaluation and comparison tools
+- Experiment tracking with Comet ML
+
+5.2.3 High Concurrency Support
+- Parallel processing of multiple repositories
+- ThreadPoolExecutor for concurrent operations
+- Asynchronous task queue with RabbitMQ
+- Scalable architecture for enterprise use
+
+5.2.4 RAG (Retrieval-Augmented Generation)
+- Vector database integration (Qdrant)
+- Semantic search for similar repositories
+- Context-aware documentation generation
+- Knowledge base for best practices
+
+================================================================================
+6. TECHNICAL ARCHITECTURE
+================================================================================
+
+6.1 System Components
+----------------------
+
+6.1.1 Repository Analyzer
+- GitHub crawler for cloning repositories
+- Local file system crawler
+- Project structure parser
+- File type detector
+- Metadata extractor
+
+6.1.2 Dataset Generator
+- GitHub API integration for repository discovery
+- Trending repositories crawler
+- Awesome Lists parser
+- Instruction generation using GPT-4
+- Quality control and validation
+- Deduplication mechanisms
+
+6.1.3 Document Generator
+- LLM integration (OpenAI GPT-4o-mini, fine-tuned Llama-3.1-8B)
+- Prompt engineering and templating
+- Multi-format output generation
+- GitHub API integration for file writing
+
+6.1.4 Training Pipeline
+- Data preprocessing and cleaning
+- Supervised fine-tuning (SFT) implementation
+- LoRA configuration and training
+- Model evaluation and metrics
+- Experiment tracking integration
+
+6.1.5 Infrastructure
+- Docker Compose for local development
+- Qdrant vector database
+- RabbitMQ message queue
+- Comet ML for experiment tracking
+- GitHub Actions for CI/CD
+
+6.2 Technology Stack
+--------------------
+- Programming Language: Python 3.11+
+- ML Framework: PyTorch, Transformers, PEFT, TRL
+- LLM Models: Llama-3.1-8B-Instruct (base), GPT-4o-mini (instruction generation)
+- Vector Database: Qdrant
+- Message Queue: RabbitMQ
+- Experiment Tracking: Comet ML
+- Web Framework: Gradio
+- Containerization: Docker, Docker Compose
+- CI/CD: GitHub Actions
+
+6.3 Data Flow
+-------------
+1. User provides repository URL or selects repositories via Web UI
+2. System clones and analyzes repository structure
+3. Repository metadata and code structure are extracted
+4. LLM generates documentation based on analysis
+5. Documentation is written to repository (local or via GitHub API)
+6. GitHub Actions triggers automatic updates on code changes
+
+================================================================================
+7. USER FLOWS
+================================================================================
+
+7.1 Flow 1: Single Repository Documentation (CLI)
+--------------------------------------------------
+1. User runs: `make local-generate-docs REPO=https://github.com/user/repo`
+2. System clones repository
+3. System analyzes repository structure
+4. System generates README_BY_MOXI.md
+5. System writes documentation to repository (optional)
+6. User reviews and commits documentation
+
+7.2 Flow 2: Batch Processing (CLI)
+------------------------------------
+1. User runs: `make generate-training-dataset`
+2. System fetches 1000+ repositories from GitHub
+3. System processes repositories concurrently (50 workers)
+4. System generates training dataset
+5. System validates and deduplicates samples
+6. System saves dataset for model training
+
+7.3 Flow 3: Automated Updates (GitHub Actions)
+-----------------------------------------------
+1. User pushes code to repository
+2. GitHub Actions workflow triggers
+3. System analyzes updated code
+4. System regenerates documentation
+5. System commits updated documentation
+6. Documentation is automatically updated in repository
+
+7.4 Flow 4: Web UI Setup
+-------------------------
+1. User accesses Gradio web interface
+2. User authenticates with GitHub
+3. User selects repositories to track
+4. System generates GitHub Actions workflows
+5. System writes workflows to selected repositories
+6. Repositories are automatically tracked for updates
+
+================================================================================
+8. NON-FUNCTIONAL REQUIREMENTS
+================================================================================
+
+8.1 Performance
+---------------
+- Documentation generation: < 2 minutes per repository
+- Batch processing: 1000 repositories in < 15 minutes
+- API response time: < 5 seconds
+- Concurrent processing: Support 50+ parallel workers
+
+8.2 Scalability
+--------------
+- Support processing 10,000+ repositories
+- Handle 100+ concurrent requests
+- Efficient resource utilization (CPU, memory, GPU)
+- Horizontal scaling capabilities
+
+8.3 Reliability
+---------------
+- 99% uptime for API services
+- Graceful error handling and recovery
+- Rate limit handling for GitHub API
+- Retry mechanisms for failed operations
+
+8.4 Security
+------------
+- Secure API key management
+- GitHub token encryption
+- Input validation and sanitization
+- Rate limiting to prevent abuse
+
+8.5 Usability
+-------------
+- Simple CLI interface with clear commands
+- Intuitive web UI
+- Comprehensive error messages
+- Detailed logging and debugging information
+
+8.6 Cost Efficiency
+-------------------
+- 90% cost reduction compared to GPT-4 API
+- Efficient model training with LoRA
+- Caching mechanisms for repeated operations
+- Resource optimization
+
+================================================================================
+9. INTEGRATION REQUIREMENTS
+================================================================================
+
+9.1 GitHub Integration
+----------------------
+- GitHub API for repository cloning
+- GitHub API for file reading and writing
+- GitHub Actions for automated workflows
+- GitHub OAuth for web UI authentication
+- GitHub Webhooks for event triggers (future)
+
+9.2 External Services
+---------------------
+- OpenAI API for instruction generation
+- Hugging Face for model hosting
+- Comet ML for experiment tracking
+- Qdrant Cloud (optional) for vector database
+
+9.3 Development Tools
+---------------------
+- Docker for containerization
+- Poetry for dependency management
+- Makefile for automation
+- Git for version control
+
+================================================================================
+10. DATA REQUIREMENTS
+================================================================================
+
+10.1 Training Data
+------------------
+- Source: 1000+ high-quality GitHub repositories
+- Minimum stars: 500 per repository
+- Languages: Python (primary), JavaScript, Go, Rust
+- Quality criteria: Has README, active maintenance, clear structure
+- Dataset size: 10,000+ training samples
+- Format: JSON with instruction-input-output structure
+
+10.2 Data Collection
+--------------------
+- GitHub API for repository discovery
+- Awesome Lists for curated repositories
+- Trending repositories for popular projects
+- Manual curation for specific use cases
+
+10.3 Data Processing
+--------------------
+- README extraction and validation
+- Instruction generation using GPT-4
+- Quality control and filtering
+- Deduplication and validation
+- Tokenization and formatting
+
+================================================================================
+11. MODEL REQUIREMENTS
+================================================================================
+
+11.1 Base Model
+--------------
+- Model: Meta Llama-3.1-8B-Instruct
+- License: Llama 3 Community License
+- Capabilities: Instruction following, text generation
+- Fine-tuning: Supervised Fine-Tuning (SFT) + LoRA
+
+11.2 Training Configuration
+---------------------------
+- Method: LoRA (Low-Rank Adaptation)
+- Rank (r): 32 (configurable)
+- Alpha: 64 (configurable)
+- Target modules: q_proj, v_proj, k_proj, o_proj
+- Training epochs: 3-5
+- Learning rate: 2e-4
+- Batch size: 4-8 (depending on GPU memory)
+
+11.3 Evaluation Metrics
+-----------------------
+- BLEU score for text quality
+- ROUGE score for content coverage
+- Human evaluation (user approval rate)
+- Cost and latency comparison with GPT-4
+
+================================================================================
+12. DEPLOYMENT AND INFRASTRUCTURE
+================================================================================
+
+12.1 Local Development
+----------------------
+- Docker Compose for local services (Qdrant, RabbitMQ)
+- Poetry for Python dependency management
+- Makefile for common tasks
+- Environment variables via .env file
+
+12.2 CI/CD Pipeline
+-------------------
+- GitHub Actions for automated testing
+- Automated documentation updates
+- Model training pipeline automation
+- Deployment automation (future)
+
+12.3 Production Deployment (Future)
+------------------------------------
+- Cloud infrastructure (AWS/GCP/Azure)
+- Container orchestration (Kubernetes)
+- Load balancing and auto-scaling
+- Monitoring and logging (Prometheus, Grafana)
+
+================================================================================
+13. SUCCESS CRITERIA AND METRICS
+================================================================================
+
+13.1 Technical Metrics
+----------------------
+- Documentation generation accuracy: > 85%
+- Processing speed: < 2 minutes per repository
+- Cost per generation: < $0.01
+- System uptime: > 99%
+- Error rate: < 5%
+
+13.2 User Metrics
+-----------------
+- User satisfaction: > 4.5/5.0
+- Adoption rate: 1000+ repositories in 6 months
+- Active users: 500+ in first year
+- Retention rate: > 70%
+
+13.3 Business Metrics
+---------------------
+- Cost savings: 90% reduction vs GPT-4 API
+- Time savings: 90% reduction in documentation time
+- Market penetration: Top 10 documentation tools
+- Revenue potential: Freemium model (future)
+
+================================================================================
+14. RISKS AND MITIGATION
+================================================================================
+
+14.1 Technical Risks
+---------------------
+Risk: Model quality not meeting expectations
+Mitigation: Extensive testing, iterative improvement, human evaluation
+
+Risk: GitHub API rate limits
+Mitigation: Token management, rate limit handling, caching
+
+Risk: High training costs
+Mitigation: Use LoRA for efficient training, cloud credits, optimization
+
+14.2 Business Risks
+-------------------
+Risk: Low user adoption
+Mitigation: Clear value proposition, easy onboarding, marketing
+
+Risk: Competition from established tools
+Mitigation: Focus on unique features (fine-tuning, cost efficiency)
+
+Risk: API cost increases
+Mitigation: Self-hosted models, cost monitoring, optimization
+
+14.3 Operational Risks
+----------------------
+Risk: System downtime
+Mitigation: Monitoring, redundancy, backup systems
+
+Risk: Data privacy concerns
+Mitigation: Clear privacy policy, secure data handling, compliance
+
+================================================================================
+15. TIMELINE AND MILESTONES
+================================================================================
+
+15.1 Phase 1: MVP (Completed)
+------------------------------
+- Repository analysis and parsing
+- Basic documentation generation
+- CLI interface
+- GitHub Actions integration
+- Single repository processing
+
+15.2 Phase 2: Dataset Generation (Completed)
+--------------------------------------------
+- GitHub API integration
+- Repository crawling and filtering
+- Instruction generation pipeline
+- Quality control and validation
+- Dataset export functionality
+
+15.3 Phase 3: Web UI (Completed)
+---------------------------------
+- Gradio web interface
+- GitHub OAuth integration
+- Repository selection and management
+- Automated workflow generation
+- Batch setup capabilities
+
+15.4 Phase 4: Model Training (In Progress)
+-------------------------------------------
+- Training data preparation
+- LoRA configuration
+- SFT implementation
+- Model evaluation
+- Experiment tracking
+
+15.5 Phase 5: Production Ready (Future)
+---------------------------------------
+- Model deployment
+- Performance optimization
+- Comprehensive testing
+- Documentation and tutorials
+- Public release
+
+================================================================================
+16. FUTURE ENHANCEMENTS
+================================================================================
+
+16.1 Short-term (3-6 months)
+-----------------------------
+- Support for more programming languages
+- Additional documentation formats (Sphinx, JSDoc)
+- Custom prompt templates
+- A/B testing framework
+- Model comparison tools
+
+16.2 Medium-term (6-12 months)
+-------------------------------
+- RAG integration for context-aware generation
+- Multi-model support (GPT-4, Claude, custom models)
+- Collaborative features (team workspaces)
+- Analytics and insights dashboard
+- API for third-party integrations
+
+16.3 Long-term (12+ months)
+---------------------------
+- Enterprise features (SSO, RBAC)
+- Self-hosted deployment options
+- Marketplace for custom models
+- Community contributions and plugins
+- Commercial licensing options
+
+================================================================================
+17. APPENDICES
+================================================================================
+
+17.1 Glossary
+-------------
+- SFT: Supervised Fine-Tuning
+- LoRA: Low-Rank Adaptation
+- RAG: Retrieval-Augmented Generation
+- MVP: Minimum Viable Product
+- CI/CD: Continuous Integration/Continuous Deployment
+
+17.2 References
+---------------
+- Llama 3.1 Model Card
+- GitHub API Documentation
+- OpenAI API Documentation
+- Transformers Library Documentation
+- PEFT Library Documentation
+
+17.3 Contact Information
+------------------------
+- Project Repository: https://github.com/[username]/moxi
+- Documentation: [Link to documentation]
+- Issues: [Link to issue tracker]
+- Email: [Contact email]
+
+================================================================================
+END OF DOCUMENT
+================================================================================
+

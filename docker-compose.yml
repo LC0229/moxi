@@ -17,6 +17,24 @@ services:
       timeout: 10s
       retries: 3
 
+  # MongoDB (like llm-twin-course: store collected READMEs, file trees, SFT samples)
+  mongodb:
+    image: mongo:7
+    container_name: moxi-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: moxi
+      MONGO_INITDB_ROOT_PASSWORD: moxi
+    volumes:
+      - mongodb-data:/data/db
+    restart: always
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   # RabbitMQ message queue (for task processing)
   rabbitmq:
     image: rabbitmq:3-management-alpine
@@ -39,6 +57,7 @@ services:
 
 volumes:
   qdrant-data:
+  mongodb-data:
   rabbitmq-data:
   rabbitmq-logs:
 

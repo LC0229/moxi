@@ -1,0 +1,24 @@
+{
+  "exclude": [
+    "**/node_modules",
+    "**/__pycache__",
+    "**/.*",
+    "**/data",
+    "**/training_data",
+    "**/models",
+    "**/repos",
+    "**/.venv",
+    "**/venv",
+    "**/env",
+    "**/.git",
+    "**/dist",
+    "**/build",
+    "**/*.egg-info"
+  ],
+  "include": [
+    "src"
+  ],
+  "reportMissingImports": true,
+  "reportMissingTypeStubs": false
+}
+

@@ -4,7 +4,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Dict, List, Optional
 
 from core import get_logger, settings
-from repo_analyzer import analyze_repository
+from moxi_analyzer import analyze_repository
 from doc_generator.llm.architecture_gen import ArchitectureGenerator
 from doc_generator.writer import write_to_repo_via_api
 
@@ -37,7 +37,7 @@ def generate_single_doc(
     try:
         logger.info("Generating architecture diagram", url=repo_url, auto_write=auto_write)
 
-        # Step 1: Analyze repository (uses repo_analyzer)
+        # Step 1: Analyze repository (uses moxi_analyzer)
         repo_analysis = analyze_repository(
             repo_url,
             cache_dir=cache_dir or settings.REPO_CACHE_DIR

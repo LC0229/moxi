@@ -1,4 +1,4 @@
-"""Gradio web UI for Moxi - Easy setup interface."""
+"""Gradio web UI for Moxi - for end users (one-click setup for auto-documentation)."""
 
 import gradio as gr
 from typing import List, Optional
@@ -133,8 +133,7 @@ def setup_workflows(github_token: str, selected_repo_urls: List[str]) -> str:
 
 
 def create_gradio_interface():
-    """Create and return Gradio interface."""
-    
+    """Create and return Gradio interface (for end users)."""
     with gr.Blocks(title="Moxi - Auto Documentation Setup") as app:
         gr.Markdown(
             """
@@ -159,7 +158,6 @@ def create_gradio_interface():
             Go to: https://github.com/settings/tokens → Generate new token (classic) → Select `repo` scope
             """
         )
-        
         with gr.Row():
             with gr.Column(scale=1):
                 github_token = gr.Textbox(
@@ -179,7 +177,6 @@ def create_gradio_interface():
                     interactive=False,
                     lines=2,
                 )
-            
             with gr.Column(scale=2):
                 repo_checkboxes = gr.CheckboxGroup(
                     label="Select Repositories",
@@ -192,20 +189,16 @@ def create_gradio_interface():
                     interactive=False,
                     lines=10,
                 )
-        
-        # Event handlers
         fetch_btn.click(
             fn=fetch_repos,
             inputs=[github_token, username],
             outputs=[status, repo_checkboxes],
         )
-        
         setup_btn.click(
             fn=setup_workflows,
             inputs=[github_token, repo_checkboxes],
             outputs=[results],
         )
-        
         gr.Markdown(
             """
             ---
@@ -216,7 +209,6 @@ def create_gradio_interface():
             - You can manually trigger the workflow from the Actions tab
             """
         )
-    
     return app
 
 

@@ -14,7 +14,7 @@ logger = get_logger(__name__)
 def write_to_repo_via_api(
     repo_url: str,
     content: str,
-    file_path: str = "README.md",
+    file_path: str = "ARCHITECTURE_BY_MOXI.md",
     branch: str = "main",
     commit_message: Optional[str] = None,
     github_token: Optional[str] = None,
@@ -28,7 +28,7 @@ def write_to_repo_via_api(
     Args:
         repo_url: GitHub repository URL (e.g., "https://github.com/user/repo")
         content: File content to write
-        file_path: Path to file in repository (default: "README.md")
+        file_path: Path to file in repository (default: "ARCHITECTURE_BY_MOXI.md")
         branch: Branch name (default: "main")
         commit_message: Commit message (default: auto-generated)
         github_token: GitHub token (if None, uses settings.GITHUB_TOKEN)
